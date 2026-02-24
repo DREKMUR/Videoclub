@@ -1,37 +1,30 @@
-<div class="row">
+@extends('layouts.master')
+
+@section('content')
+<body class="bg-gray-100 min-h-screen p-8">
+
+<h1 class="text-3xl font-bold text-gray-800 mb-8">Catálogo de películas</h1>
+
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
     @foreach ($arrayPeliculas as $key => $pelicula)
-        <div class="col-xs-6 col-sm-4 col-md-3 text-center"> <a href="{{ route('catalog.show', $key) }}"> <img
-                    src="{{ $pelicula['poster'] }}" style="height:200px" />
-                <h4 style="min-height: 45px; margin:5px 0 10px 0"> {{ $pelicula['title'] }} </h4>
-            </a> </div>
+        <a href="{{ route('catalog.show', $key) }}"
+           class="bg-white rounded-xl overflow-hidden shadow hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col">
+
+            <img
+                src="{{ $pelicula['poster'] }}"
+                alt="{{ $pelicula['title'] }}"
+                class="w-full h-52 object-cover"
+            >
+
+            <div class="p-3 flex-1 flex items-center justify-center">
+                <h4 class="text-sm font-semibold text-gray-800 text-center leading-snug line-clamp-2">
+                    {{ $pelicula['title'] }}
+                </h4>
+            </div>
+
+        </a>
     @endforeach
 </div>
 
-<div class="row">
-    <div class="col-sm-4">
-        <img src="{{ $pelicula['poster'] }}" style="width:100%" alt="Póster de la película">
-    </div>
-    <div class="col-sm-8">
-        <h2>{{ $pelicula['title'] }}</h2>
-        <h4>Año: {{ $pelicula['year'] }}</h4>
-        <h4>Director: {{ $pelicula['director'] }}</h4>
-        <p><strong>Resumen:</strong> {{ $pelicula['synopsis'] }}</p>
-
-        <p><strong>Estado: </strong>
-            @if ($pelicula['rented'])
-                Película actualmente alquilada.
-            @else
-                Película disponible.
-            @endif
-        </p>
-
-        @if ($pelicula['rented'])
-            <button class="btn btn-danger">Devolver película</button>
-        @else
-            <button class="btn btn-primary">Alquilar película</button>
-        @endif
-
-        <a class="btn btn-warning" href="{{ route('catalog.edit', $id) }}">Editar película</a> <a
-            class="btn btn-default btn-outline-dark" href="{{ route('catalog') }}">Volver al listado</a>
-    </div>
-</div>
+</body>
+@endsection
