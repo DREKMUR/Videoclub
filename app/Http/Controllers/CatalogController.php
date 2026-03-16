@@ -2,38 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Movie;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class CatalogController extends Controller
 {
-    public function index() {
-        return view('catalog.index', [
-            'arrayPeliculas' => Movie::paginate(10)
-        ]);
+    public function getIndex()
+    {
+        $peliculas = Movie::paginate(10);
+        return view('catalog.index', compact('peliculas'));
     }
 
-    public function show($id){
-        return view('catalog.show',[
-            'pelicula' => Movie::findOrFail($id)
-        ]);
+    public function getShow($id)
+    {
+        $pelicula = Movie::findOrFail($id);
+        return view('catalog.show', compact('pelicula'));
+    }
+
+    public function getCreate()
+    {
+        return view('catalog.create');
     }
 
     public function postCreate(Request $request)
     {
-        $movie = new Movie;
-        $movie->title = $request->input('title');
-        $movie->year = $request->input('year');
-        $movie->director = $request->input('director');
-        $movie->poster = $request->input('poster');
-        $movie->synopsis = $request->input('synopsis');
-        $movie->rented = false;
-        $movie->save();
+        $pelicula = new Movie();
+        $pelicula->title = $request->title;
+        $pelicula->year = $request->year;
+        $pelicula->director = $request->director;
+        $pelicula->poster = $request->poster;
+        $pelicula->rented = false;
+        $pelicula->synopsis = $request->synopsis;
+        $pelicula->save();
 
-        return redirect()->route('catalog.table');
+        Session::flash('mensaje', 'La película se ha añadido correctamente');
+        return redirect('/catalog');
     }
 
-    public function edit($id)
+    public function getEdit($id)
     {
         $pelicula = Movie::findOrFail($id);
         return view('catalog.edit', compact('pelicula'));
@@ -41,20 +48,44 @@ class CatalogController extends Controller
 
     public function putEdit(Request $request, $id)
     {
-        $movie = Movie::findOrFail($id);
-        $movie->title = $request->input('title');
-        $movie->year = $request->input('year');
-        $movie->director = $request->input('director');
-        $movie->poster = $request->input('poster');
-        $movie->synopsis = $request->input('synopsis');
-        $movie->save();
+        $pelicula = Movie::findOrFail($id);
+        $pelicula->title = $request->title;
+        $pelicula->year = $request->year;
+        $pelicula->director = $request->director;
+        $pelicula->poster = $request->poster;
+        $pelicula->synopsis = $request->synopsis;
+        $pelicula->save();
 
-        return redirect()->route('catalog.show', ['id' => $id]);
+        Session::flash('mensaje', 'La película se ha modificado correctamente');
+        return redirect('/catalog/show/'.$id);
     }
 
-    public function table()
+    public function putRent($id)
     {
-        $movies = Movie::paginate(10);
-        return view('catalog.table', compact('movies'));
+        $pelicula = Movie::findOrFail($id);
+        $pelicula->rented = true;
+        $pelicula->save();
+
+        Session::flash('mensaje', 'La película se ha alquilado correctamente');
+        return redirect('/catalog/show/'.$id);
+    }
+
+    public function putReturn($id)
+    {
+        $pelicula = Movie::findOrFail($id);
+        $pelicula->rented = false;
+        $pelicula->save();
+
+        Session::flash('mensaje', 'La película se ha devuelto correctamente');
+        return redirect('/catalog/show/'.$id);
+    }
+
+    public function deleteMovie($id)
+    {
+        $pelicula = Movie::findOrFail($id);
+        $pelicula->delete();
+
+        Session::flash('mensaje', 'La película se ha eliminado correctamente');
+        return redirect('/catalog');
     }
 }

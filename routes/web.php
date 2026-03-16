@@ -1,21 +1,25 @@
 <?php
 
-use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog');
-Route::get('/catalog/show/{id}', [CatalogController::class, 'show'])->name('catalog.show');
-Route::post('/catalog/create', [CatalogController::class, 'postCreate'])->name('catalog.create');
-Route::get('/catalog/edit/{id}', [CatalogController::class, 'edit'])->name('catalog.edit');
-Route::put('/catalog/edit/{id}', [CatalogController::class, 'putEdit'])->name('catalog.edit.put');
-Route::get('/catalog/table', [CatalogController::class, 'table'])->name('catalog.table');
+require __DIR__.'/auth.php';
 
-Route::get('login', function () {
-    return view('auth.login');
-});
 
-Route::get('logout', function () {
-    return view('auth.logout');
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/catalog', [CatalogController::class, 'getIndex'])->name('catalog');
+Route::get('/catalog/show/{id}', [CatalogController::class, 'getShow'])->name('catalog.show');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/catalog/create', [CatalogController::class, 'getCreate'])->name('catalog.create');
+    Route::post('/catalog/create', [CatalogController::class, 'postCreate']);
+    Route::get('/catalog/edit/{id}', [CatalogController::class, 'getEdit']);
+    Route::put('/catalog/edit/{id}', [CatalogController::class, 'putEdit'])->name('catalog.edit.put');
+
+    Route::put('/catalog/rent/{id}', [CatalogController::class, 'putRent']);
+    Route::put('/catalog/return/{id}', [CatalogController::class, 'putReturn']);
+    Route::delete('/catalog/delete/{id}', [CatalogController::class, 'deleteMovie']);
 });

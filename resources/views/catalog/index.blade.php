@@ -6,7 +6,7 @@
 <h1 class="text-3xl font-bold text-gray-800 mb-8">Catálogo de películas</h1>
 
 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-    @foreach ($arrayPeliculas as $key => $pelicula)
+    @foreach ($peliculas as $key => $pelicula)
         <a href="{{ route('catalog.show', $pelicula->id) }}"
            class="bg-white rounded-xl overflow-hidden shadow hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col">
 
@@ -27,7 +27,7 @@
 </div>
 
 <div class="mt-12">
-    {{ $arrayPeliculas->links() }}
+    {{ $peliculas->links() }}
 </div>
 
 </body>

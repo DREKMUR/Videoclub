@@ -1,38 +1,24 @@
-<nav class="bg-gray-100 border-b border-gray-200">
-    <div class="container mx-auto px-4">
-        <div class="flex justify-between h-16">
-
-            <div class="flex items-center">
-                <a class="text-xl font-bold text-gray-600 hover:text-gray-800 flex items-center gap-2" href="/">
-                    <span style="font-size:15pt">&#9820;</span> Videoclub
-                </a>
+<nav class="bg-indigo-900 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex-shrink-0">
+                <a href="/catalog" class="text-2xl font-extrabold tracking-tight">📽️ Videoclub</a>
             </div>
-
-            @if( true || Auth::check() )
-                <div class="hidden md:flex space-x-8 items-center">
-                    <div class="flex space-x-4">
-                        <a href="{{url('/catalog')}}"
-                           class="{{ Request::is('catalog') && ! Request::is('catalog/create') ? 'text-blue-600 font-semibold' : 'text-gray-500 hover:text-gray-700' }} px-3 py-2 text-sm font-medium transition-colors">
-                            <span aria-hidden="true"></span> Catálogo
-                        </a>
-
-                        <a href="{{url('/catalog/create')}}"
-                           class="{{ Request::is('catalog/create') ? 'text-blue-600 font-semibold' : 'text-gray-500 hover:text-gray-700' }} px-3 py-2 text-sm font-medium transition-colors">
-                            <span>&#10010;</span> Nueva película
-                        </a>
-                    </div>
-                </div>
-
-                <div class="flex items-center">
-                    <form action="{{ url('/logout') }}" method="POST">
-                        {{ csrf_field() }}
-                        <button type="submit" class="text-gray-500 hover:text-red-600 text-sm font-medium transition-colors cursor-pointer">
-                            Cerrar sesión
+            <div class="flex items-center space-x-6">
+                <a href="/catalog" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition">Catálogo</a>
+                @if(Auth::check())
+                    <a href="/catalog/create" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition">Añadir Película</a>
+                    <form action="/logout" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm font-medium transition shadow-sm">
+                            Cerrar Sesión
                         </button>
                     </form>
-                </div>
-            @endif
-
+                @else
+                    <a href="/login" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-md text-sm font-medium transition shadow-sm">Iniciar Sesión</a>
+                    <a href="/register" class="px-4 py-2 border border-indigo-400 hover:bg-indigo-800 rounded-md text-sm font-medium transition">Registrarse</a>
+                @endif
+            </div>
         </div>
     </div>
 </nav>
