@@ -26,5 +26,9 @@
     @endforeach
 </div>
 
+<div class="mt-12">
+    {{ $arrayPeliculas->links() }}
+</div>
+
 </body>
 @endsection
