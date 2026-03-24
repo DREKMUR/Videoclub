@@ -6,6 +6,8 @@
             </div>
             <div class="flex items-center space-x-6">
                 <a href="/catalog" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition">Catálogo</a>
+
+                <a href="/catalog/table" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition">Tabla</a>
                 @if(Auth::check())
                     <a href="/catalog/create" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition">Añadir Película</a>
                     <form action="/logout" method="POST" class="m-0">

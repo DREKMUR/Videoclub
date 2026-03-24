@@ -88,4 +88,10 @@ class CatalogController extends Controller
         Session::flash('mensaje', 'La película se ha eliminado correctamente');
         return redirect('/catalog');
     }
+
+    public function table()
+    {
+        $peliculas = Movie::paginate(10);
+        return view('catalog.table', compact('peliculas'));
+    }
 }
